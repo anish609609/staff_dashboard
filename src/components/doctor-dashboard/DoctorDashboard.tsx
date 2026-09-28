@@ -17,6 +17,7 @@ interface DoctorDashboardProps {
   patients: PatientRecord[];
   onUpdateOpdStatus: (opdId: string, newStatus: 'waiting' | 'consulted') => void;
   onSaveConsultation: (consultation: ConsultationRecord, updatedEntry: OPDEntry, updatedPatient: PatientRecord) => void;
+  onBookAppointment?: (appointmentData: any) => OPDEntry;
 }
 
 export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
@@ -26,6 +27,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
   patients,
   onUpdateOpdStatus,
   onSaveConsultation,
+  onBookAppointment,
 }) => {
   const [activeTab, setActiveTab] = useState<'opds' | 'analytics'>('opds');
   const [currentHour, setCurrentHour] = useState<number>(new Date().getHours());
@@ -84,7 +86,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
               onClick={() => setActiveTab('opds')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'opds'
-                  ? 'bg-slate-900 text-white shadow-xs'
+                  ? 'bg-emerald-600 text-white shadow-xs'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
               }`}
             >
@@ -94,7 +96,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
                 <span
                   className={`text-[10px] font-extrabold px-1.5 py-0.2 rounded-full font-tabular ${
                     activeTab === 'opds'
-                      ? 'bg-emerald-500 text-white'
+                      ? 'bg-white text-emerald-800'
                       : 'bg-emerald-100 text-emerald-900'
                   }`}
                 >
@@ -108,12 +110,12 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
               onClick={() => setActiveTab('analytics')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'analytics'
-                  ? 'bg-slate-900 text-white shadow-xs'
+                  ? 'bg-emerald-600 text-white shadow-xs'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
               }`}
             >
               <BarChart3 className="w-4 h-4" />
-              <span>Analytics &amp; Reports</span>
+              <span>Analytics</span>
             </button>
           </div>
         </div>
@@ -128,6 +130,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({
             currentDoctor={currentDoctor}
             onUpdateOpdStatus={onUpdateOpdStatus}
             onSaveConsultation={onSaveConsultation}
+            onBookAppointment={onBookAppointment}
           />
         ) : (
           <AnalyticsTab

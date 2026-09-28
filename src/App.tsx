@@ -191,7 +191,7 @@ export default function App() {
       session: appointmentData.session,
       registeredTime: getNowFormatted(),
       registeredTimestamp: Date.now(),
-      createdBy: currentStaff.name,
+      createdBy: userRole === 'doctor' ? `Dr. ${currentDoctor.name}` : currentStaff.name,
       status: 'waiting',
       doctorAssigned: appointmentData.doctorAssigned || currentDoctor.name || CONSULTING_DOCTOR,
       room: appointmentData.room || currentDoctor.room || CONSULTING_ROOM,
@@ -285,6 +285,7 @@ export default function App() {
             patients={patients}
             onUpdateOpdStatus={handleUpdateOpdStatus}
             onSaveConsultation={handleSaveConsultation}
+            onBookAppointment={handleBookAppointment}
           />
         ) : (
           <StaffDashboard

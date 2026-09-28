@@ -190,6 +190,7 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                 className={`border border-slate-200 rounded-xl bg-white shadow-2xs transition-all overflow-hidden ${
                   isCancelled ? 'opacity-40 bg-slate-50' : 'hover:border-slate-300'
                 }`}
+                style={{ backgroundImage: 'none' }}
               >
                 {/* Collapsed Card View: Increased sizing and prominent display for high legibility */}
                 <div
@@ -202,26 +203,27 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                       toggleCard(entry.id);
                     }
                   }}
-                  className="p-4 sm:p-5 cursor-pointer focus:outline-hidden hover:bg-slate-50/80 transition-colors"
+                  className="p-4 sm:p-5 cursor-pointer focus:outline-hidden bg-white hover:bg-slate-50 transition-colors"
+                  style={{ backgroundImage: 'none' }}
                   aria-expanded={isExpanded}
                 >
-                  {/* 1. Top Header Row: Larger Token badge on top-left, Status badge on top-right */}
-                  <div className="flex items-center justify-between gap-3 mb-2.5">
-                    {/* Top-Left: Token Badge (Increased size) */}
-                    <span className="shrink-0 font-tabular font-extrabold px-3 py-1.5 rounded-lg text-sm sm:text-base bg-slate-100 text-slate-900 border border-slate-300 shadow-2xs">
-                      #{entry.tokenDisplay}
-                    </span>
+                  {/* 1. Top Header Row: Token badge on left, Status badge beside it, Chevron on right */}
+                  <div className="flex items-center justify-between gap-3 mb-2">
+                    <div className="flex items-center gap-2">
+                      {/* Top-Left: Token Badge */}
+                      <span className="shrink-0 font-tabular font-extrabold px-3 py-1.5 rounded-lg text-sm sm:text-base bg-slate-100 text-slate-900 border border-slate-300 shadow-2xs">
+                        #{entry.tokenDisplay}
+                      </span>
 
-                    {/* Top-Right: Status Badge & Chevron */}
-                    <div className="flex items-center gap-2.5">
+                      {/* Status Badge beside Token Number */}
                       {entry.status === 'waiting' && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs sm:text-sm font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold bg-amber-50 text-amber-800 border border-amber-300 font-tabular">
                           <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                           Waiting
                         </span>
                       )}
                       {entry.status === 'consulted' && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 font-tabular">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           Consulted
                         </span>
@@ -231,34 +233,49 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                           Cancelled
                         </span>
                       )}
+                    </div>
 
-                      <div className="text-slate-400 p-1 rounded hover:bg-slate-200">
-                        {isExpanded ? (
-                          <ChevronUp className="w-5 h-5 text-slate-700" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-slate-400" />
-                        )}
-                      </div>
+                    {/* Chevron Indicator */}
+                    <div className="text-slate-400 p-1 rounded hover:bg-slate-200">
+                      {isExpanded ? (
+                        <ChevronUp className="w-5 h-5 text-slate-700" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-slate-400" />
+                      )}
                     </div>
                   </div>
 
-                  {/* 2. Patient Name: Prominently directly below top header row (Larger typography) */}
-                  <div className="mb-1">
-                    <h3 className={`font-extrabold text-slate-950 text-lg sm:text-xl leading-snug break-words ${isCancelled ? 'line-through text-slate-400' : ''}`}>
-                      {entry.patientName}
-                    </h3>
+                  {/* 2. Second Line: Patient Name on its own line below the token number */}
+                  <h3 className={`font-extrabold text-slate-950 text-base sm:text-lg leading-snug break-words mt-2 ${isCancelled ? 'line-through text-slate-400' : ''}`}>
+                    {entry.patientName}
+                  </h3>
+
+                  {/* 3. Third Line: Gender & Age on its own line below the name */}
+                  <div className="text-xs sm:text-sm text-slate-500 font-medium font-tabular mt-0.5">
+                    <span>{entry.gender}</span>
+                    <span className="mx-1">·</span>
+                    <span>{entry.age ? `${entry.age}y` : 'Age N/A'}</span>
                   </div>
 
-                  {/* 3. Patient Meta Row: Demographic info vertically below name */}
-                  <div className="text-xs sm:text-sm text-slate-600 font-medium">
-                    <span>{entry.gender}</span>
-                    {entry.age ? <span>, {entry.age} years</span> : ''}
+                  {/* 4. Fourth Line: Chief Complaint on its own line below the gender/age */}
+                  <div className="mt-2.5 pt-2 border-t border-slate-100 text-xs text-slate-700 truncate">
+                    {entry.chiefComplaint ? (
+                      <span className="text-slate-800">
+                        <span className="text-slate-400 font-normal">Complaint: </span>
+                        <span className="font-medium">{entry.chiefComplaint}</span>
+                      </span>
+                    ) : (
+                      <span className="text-slate-400 italic">General ENT checkup</span>
+                    )}
                   </div>
                 </div>
 
                 {/* Expandable Detail Layer (OnClick View) */}
                 {isExpanded && (
-                  <div className="border-t border-slate-100 bg-slate-50/70 p-3.5 sm:p-4 space-y-2.5 text-xs text-slate-700 animate-in fade-in duration-100">
+                  <div 
+                    className="border-t border-slate-100 bg-slate-50 p-3.5 sm:p-4 space-y-2.5 text-xs text-slate-700 animate-in fade-in duration-100"
+                    style={{ backgroundImage: 'none' }}
+                  >
                     {/* Contact / Phone (Tap-to-call) */}
                     <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
                       <span className="font-semibold text-slate-500 shrink-0 sm:w-36">

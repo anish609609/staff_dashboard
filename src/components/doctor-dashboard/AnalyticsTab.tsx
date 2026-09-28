@@ -140,9 +140,9 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
       {/* Date Filter Bar */}
       <div className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-emerald-600" />
+          <Filter className="w-4 h-4 text-emerald-600 shrink-0" />
           <div>
-            <h2 className="text-sm font-bold text-slate-900">Analytics &amp; Performance Reports</h2>
+            <h2 className="text-sm font-bold text-slate-900">Analytics</h2>
             <p className="text-[11px] text-slate-500 font-medium">
               Real-time clinical throughput &amp; staff workload distribution
             </p>
@@ -151,11 +151,11 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
 
         {/* Filter Segmented Buttons */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center p-1 bg-slate-100 rounded-lg text-xs font-semibold gap-1">
+          <div className="grid grid-cols-2 sm:flex p-1 bg-slate-100 rounded-lg text-xs font-semibold gap-1 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setFilterOption('today')}
-              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer text-center ${
                 filterOption === 'today'
                   ? 'bg-white text-slate-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -166,7 +166,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
             <button
               type="button"
               onClick={() => setFilterOption('week')}
-              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer text-center ${
                 filterOption === 'week'
                   ? 'bg-white text-slate-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -177,7 +177,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
             <button
               type="button"
               onClick={() => setFilterOption('month')}
-              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer text-center ${
                 filterOption === 'month'
                   ? 'bg-white text-slate-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -188,7 +188,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
             <button
               type="button"
               onClick={() => setFilterOption('custom')}
-              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md transition-colors cursor-pointer text-center ${
                 filterOption === 'custom'
                   ? 'bg-white text-slate-900 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -200,19 +200,19 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
 
           {/* Custom Date Pickers */}
           {filterOption === 'custom' && (
-            <div className="flex items-center gap-1.5 text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs w-full sm:w-auto">
               <input
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-tabular font-medium"
+                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-tabular font-medium flex-1 sm:flex-initial"
               />
               <span className="text-slate-400">to</span>
               <input
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-tabular font-medium"
+                className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-tabular font-medium flex-1 sm:flex-initial"
               />
             </div>
           )}
@@ -220,7 +220,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
       </div>
 
       {/* 1. OPD Summary Metrics (Stat Cards) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: Total OPD Volume */}
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between">
@@ -331,10 +331,10 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
       </div>
 
       {/* 2. OPD Volume Trends Chart */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-5 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-1">
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-emerald-600" />
+            <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
             <h3 className="text-sm font-bold text-slate-900">
               OPD Patient Volume Trends
             </h3>
@@ -358,7 +358,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
 
                 return (
                   <div key={day.date} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-0.5">
                       <span className="font-bold text-slate-800 font-tabular text-[11px] sm:text-xs">
                         {day.displayLabel}
                       </span>
@@ -382,7 +382,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
             </div>
 
             {/* Legend */}
-            <div className="flex items-center justify-end gap-4 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+            <div className="flex flex-wrap items-center justify-start sm:justify-end gap-3 sm:gap-4 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded bg-emerald-600 inline-block" />
                 <span>Total OPD Registrations</span>

@@ -29,7 +29,10 @@ export const PatientDetailCard: React.FC<PatientDetailCardProps> = ({
   const isConsulted = entry.status === 'consulted';
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-4">
+    <div 
+      className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-4"
+      style={{ backgroundImage: 'none' }}
+    >
       {/* Top Banner: Token, Name, Demographics & Status Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div className="flex items-start gap-3">
