@@ -304,7 +304,7 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                     {/* Session & Booked Time */}
                     <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
                       <span className="font-semibold text-slate-500 shrink-0 sm:w-36">
-                        Session & Booked Time:
+                        Session :
                       </span>
                       <span className="text-slate-800 font-tabular font-medium flex items-center gap-1.5 flex-wrap">
                         <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
