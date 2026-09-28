@@ -124,23 +124,12 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
         {/* Filter Bar (Only Status Filters: All Status, Waiting, Consulted) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
           <div className="flex flex-wrap items-center gap-1.5">
-            {/* Status Filter: Strictly Waiting & Consulted */}
-            <div className="flex flex-wrap items-center p-1 bg-slate-100 rounded-md text-xs font-medium w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={() => setStatusFilter('all')}
-                className={`flex-1 sm:flex-none px-2.5 py-1.5 rounded transition-colors cursor-pointer text-center ${
-                  statusFilter === 'all'
-                    ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                All Status
-              </button>
+            {/* Status Filter: Reordered to Waiting, Consulted, All */}
+            <div className="flex flex-wrap items-center p-1 bg-slate-100 rounded-lg text-xs font-semibold w-full sm:w-auto gap-1">
               <button
                 type="button"
                 onClick={() => setStatusFilter('waiting')}
-                className={`flex-1 sm:flex-none px-2.5 py-1.5 rounded transition-colors cursor-pointer text-center ${
+                className={`flex-1 sm:flex-none px-3 py-1.5 rounded transition-colors cursor-pointer text-center ${
                   statusFilter === 'waiting'
                     ? 'bg-white text-amber-900 shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
@@ -151,13 +140,24 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
               <button
                 type="button"
                 onClick={() => setStatusFilter('consulted')}
-                className={`flex-1 sm:flex-none px-2.5 py-1.5 rounded transition-colors cursor-pointer text-center ${
+                className={`flex-1 sm:flex-none px-3 py-1.5 rounded transition-colors cursor-pointer text-center ${
                   statusFilter === 'consulted'
                     ? 'bg-white text-emerald-900 shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Consulted ({consultedCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter('all')}
+                className={`flex-1 sm:flex-none px-3 py-1.5 rounded transition-colors cursor-pointer text-center ${
+                  statusFilter === 'all'
+                    ? 'bg-white text-slate-900 shadow-xs font-semibold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All ({todayOnlyQueue.length})
               </button>
             </div>
           </div>
@@ -191,7 +191,7 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                   isCancelled ? 'opacity-40 bg-slate-50' : 'hover:border-slate-300'
                 }`}
               >
-                {/* Collapsed Card View: Clicking anywhere on card toggles expansion */}
+                {/* Collapsed Card View: Increased sizing and prominent display for high legibility */}
                 <div
                   role="button"
                   tabIndex={0}
@@ -202,57 +202,57 @@ export const LiveOpdQueueTable: React.FC<LiveOpdQueueTableProps> = ({ queue }) =
                       toggleCard(entry.id);
                     }
                   }}
-                  className="p-3.5 sm:p-4 cursor-pointer focus:outline-hidden hover:bg-slate-50/60 transition-colors"
+                  className="p-4 sm:p-5 cursor-pointer focus:outline-hidden hover:bg-slate-50/80 transition-colors"
                   aria-expanded={isExpanded}
                 >
-                  {/* 1. Top Header Row: Token badge on top-left, Status badge on top-right */}
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    {/* Top-Left: Token Badge */}
-                    <span className="shrink-0 font-tabular font-bold px-2.5 py-1 rounded-lg text-xs sm:text-sm bg-slate-100 text-slate-900 border border-slate-200">
+                  {/* 1. Top Header Row: Larger Token badge on top-left, Status badge on top-right */}
+                  <div className="flex items-center justify-between gap-3 mb-2.5">
+                    {/* Top-Left: Token Badge (Increased size) */}
+                    <span className="shrink-0 font-tabular font-extrabold px-3 py-1.5 rounded-lg text-sm sm:text-base bg-slate-100 text-slate-900 border border-slate-300 shadow-2xs">
                       #{entry.tokenDisplay}
                     </span>
 
                     {/* Top-Right: Status Badge & Chevron */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       {entry.status === 'waiting' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs sm:text-sm font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                          <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                           Waiting
                         </span>
                       )}
                       {entry.status === 'consulted' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           Consulted
                         </span>
                       )}
                       {entry.status === 'cancelled' && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-slate-400 bg-slate-100">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold text-slate-400 bg-slate-100">
                           Cancelled
                         </span>
                       )}
 
-                      <div className="text-slate-400 p-0.5 rounded hover:bg-slate-100">
+                      <div className="text-slate-400 p-1 rounded hover:bg-slate-200">
                         {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-slate-600" />
+                          <ChevronUp className="w-5 h-5 text-slate-700" />
                         ) : (
-                          <ChevronDown className="w-4 h-4 text-slate-400" />
+                          <ChevronDown className="w-5 h-5 text-slate-400" />
                         )}
                       </div>
                     </div>
                   </div>
 
-                  {/* 2. Patient Name: Prominently directly below top header row */}
-                  <div className="mb-0.5">
-                    <h3 className={`font-bold text-slate-900 text-base sm:text-lg leading-snug break-words ${isCancelled ? 'line-through text-slate-400' : ''}`}>
+                  {/* 2. Patient Name: Prominently directly below top header row (Larger typography) */}
+                  <div className="mb-1">
+                    <h3 className={`font-extrabold text-slate-950 text-lg sm:text-xl leading-snug break-words ${isCancelled ? 'line-through text-slate-400' : ''}`}>
                       {entry.patientName}
                     </h3>
                   </div>
 
                   {/* 3. Patient Meta Row: Demographic info vertically below name */}
-                  <div className="text-xs text-slate-500 font-medium">
+                  <div className="text-xs sm:text-sm text-slate-600 font-medium">
                     <span>{entry.gender}</span>
-                    {entry.age ? <span>, {entry.age}y</span> : ''}
+                    {entry.age ? <span>, {entry.age} years</span> : ''}
                   </div>
                 </div>
 

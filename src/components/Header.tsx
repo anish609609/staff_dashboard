@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StaffUser } from '../types/clinic';
 import { CLINIC_LOGO_PATH, HOSPITAL_NAME } from '../data/mockData';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Stethoscope } from 'lucide-react';
 
 interface HeaderProps {
   currentStaff: StaffUser;
   staffList?: StaffUser[];
   onSelectStaff?: (staff: StaffUser) => void;
+  onSwitchToDoctor?: () => void;
   onLogout: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentStaff,
+  onSwitchToDoctor,
   onLogout,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,49 +54,82 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Top-Right Navigation: 3-bar Hamburger Menu */}
-          <div className="relative shrink-0" ref={menuRef}>
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 sm:p-2.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
-              aria-label="Navigation Menu"
-              aria-expanded={isMenuOpen}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5 text-slate-700" />
-              ) : (
-                <Menu className="w-5 h-5 text-slate-700" />
-              )}
-            </button>
-
-            {/* Hamburger Dropdown Menu: Contains ONLY Staff Name and Logout Option */}
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-                {/* Staff Name Only */}
-                <div className="px-4 py-3 border-b border-slate-100">
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Logged in as</p>
-                  <p className="text-sm font-bold text-slate-900 truncate">
-                    {currentStaff.name}
-                  </p>
-                </div>
-
-                {/* Logout Option Only */}
-                <div className="p-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      onLogout();
-                    }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-rose-700 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer min-h-[44px]"
-                  >
-                    <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
-                    <span>Log Out</span>
-                  </button>
-                </div>
-              </div>
+          {/* Quick Doctor Console Switcher + Hamburger Menu */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {onSwitchToDoctor && (
+              <button
+                type="button"
+                onClick={onSwitchToDoctor}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-xs font-semibold text-slate-700 hover:text-emerald-900 transition-colors cursor-pointer"
+                title="Switch to Doctor Dashboard"
+              >
+                <Stethoscope className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Doctor Console</span>
+              </button>
             )}
+
+            <div className="relative shrink-0" ref={menuRef}>
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 sm:p-2.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
+                aria-label="Navigation Menu"
+                aria-expanded={isMenuOpen}
+              >
+                {isMenuOpen ? (
+                  <X className="w-5 h-5 text-slate-700" />
+                ) : (
+                  <Menu className="w-5 h-5 text-slate-700" />
+                )}
+              </button>
+
+              {/* Hamburger Dropdown Menu */}
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                  {/* Staff Name Only */}
+                  <div className="px-4 py-3 border-b border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Logged in as</p>
+                    <p className="text-sm font-bold text-slate-900 truncate">
+                      {currentStaff.name}
+                    </p>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      {currentStaff.role} · {currentStaff.deskNumber}
+                    </p>
+                  </div>
+
+                  {onSwitchToDoctor && (
+                    <div className="p-1.5 border-b border-slate-100 sm:hidden">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          onSwitchToDoctor();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Stethoscope className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>Switch to Doctor Console</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Logout Option Only */}
+                  <div className="p-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-rose-700 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer min-h-[44px]"
+                    >
+                      <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
