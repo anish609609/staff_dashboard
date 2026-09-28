@@ -17,42 +17,47 @@ vamshi-ent-hospital-reception-desk/
 ├── vite.config.ts
 ├── README.md
 └── src/
-    ├── main.tsx                         # App entry point
-    ├── App.tsx                          # Root application container & role-based view coordinator
-    ├── index.css                        # Tailwind CSS styling directives
+    ├── main.tsx                             # App entry point
+    ├── App.tsx                              # Root application container & role-based view coordinator
+    ├── index.css                            # Tailwind CSS styling directives
     ├── assets/
     │   └── images/
-    │       ├── clinic_logo_mark_*.jpg   # Hospital logo mark
-    │       └── receptionist_avatar_*.jpg# Receptionist profile avatar
+    │       ├── clinic_logo_mark_*.jpg       # Hospital logo mark
+    │       └── receptionist_avatar_*.jpg    # Receptionist profile avatar
     ├── types/
-    │   └── clinic.ts                    # TypeScript models (OPDEntry, PatientRecord, ConsultationRecord, etc.)
+    │   └── clinic.ts                        # TypeScript models (OPDEntry, PatientRecord, ConsultationRecord, etc.)
     ├── data/
-    │   ├── mockData.ts                  # Hospital details, doctors, initial patient directory & queue data
-    │   └── prescriptionAssets.ts        # Sample high-fidelity SVG Rx preview assets
+    │   ├── mockData.ts                      # Hospital details, doctors, initial patient directory & queue data
+    │   └── prescriptionAssets.ts            # Sample high-fidelity SVG Rx preview assets
     ├── utils/
-    │   ├── audioChime.ts                # Audio chime sound feedback for actions
-    │   └── patientAge.ts                # Dynamic patient age calculation
+    │   ├── audioChime.ts                    # Audio chime sound feedback for actions
+    │   └── patientAge.ts                    # Dynamic patient age calculation
     └── components/
-        ├── Footer.tsx                   # Centered hospital branding and AshwiniCare attribution
-        ├── LoginScreen.tsx              # Multi-role authentication (Doctor Console vs Reception Staff)
-        ├── doctor-dashboard/            # Modularized Doctor Consultation & Analytics Workspace
-        │   ├── DoctorDashboard.tsx      # Main doctor orchestrator (Greeting, OPDs vs Analytics tabs)
-        │   ├── DoctorHeader.tsx         # Doctor console header with profile, role-switching & logout
-        │   ├── OpdsConsultationTab.tsx  # Master-detail consultation workspace with modal triggers
-        │   ├── DoctorQueue.tsx          # Real-time left-pane incoming patient queue with 2 states (Waiting, Consulted, All)
-        │   ├── PatientConsultationModal.tsx # Comprehensive consultation modal with timestamped prescription uploader
-        │   ├── PatientDetailCard.tsx    # Staff registration details, reason for visit & call action
-        │   ├── PatientPastHistory.tsx   # Prior visit timeline with clickable Rx thumbnails & lightbox
-        │   ├── PrescriptionUploader.tsx # Drag & drop / photo prescription upload & completion form
-        │   ├── AnalyticsTab.tsx         # Date range filter, summary metric cards & volume trends
-        │   └── StaffPerformanceTable.tsx# Reception staff registrations & throughput breakdown
-        └── staff-dashboard/             # Modularized Staff Reception Desk
-            ├── StaffDashboard.tsx       # Staff workspace container (Welcome banner, spot desk, live queue)
-            ├── Header.tsx               # Staff top navigation bar with branding & profile
-            ├── WelcomeBanner.tsx        # Daily inspirational rotation banner
-            ├── LiveOpdQueueTable.tsx    # Mobile-first card-based live OPD queue with expandable cards
-            ├── SpotAppointmentDesk.tsx  # Spot appointment booking container & validation orchestrator
-            └── appointment-desk/        # Appointment creation sub-components
+        ├── Footer.tsx                       # Centered hospital branding and AshwiniCare attribution
+        ├── LoginScreen.tsx                  # Multi-role authentication (Doctor Console vs Reception Staff)
+        ├── doctor-dashboard/                # Modularized Doctor Consultation & Analytics Workspace
+        │   ├── DoctorDashboard.tsx          # Main doctor orchestrator (Greeting, OPDs vs Analytics tabs)
+        │   ├── DoctorHeader.tsx             # Doctor console header with profile, role-switching & logout
+        │   ├── OpdsConsultationTab.tsx      # Master consultation workspace with queue, search, and modals
+        │   ├── DoctorQueue.tsx              # Real-time incoming patient queue with filters & "Add Appointment" action
+        │   ├── QueueCard.tsx                # Dedicated patient queue item card with vertical hierarchy
+        │   ├── AddAppointmentModal.tsx      # Fast spot appointment modal with essential fields
+        │   ├── PatientConsultationModal.tsx # Consultation modal container with full lifecycle management
+        │   ├── PatientHeaderCard.tsx        # Top patient clinical details card (Complaint, Remarks, Phone)
+        │   ├── PreviousPrescriptionsAccordion.tsx # Collapsible previous visits & prescription lightbox
+        │   ├── ConsultationForm.tsx         # Doctor's note, Rx attachment, follow-up timeline & actions
+        │   ├── PatientDetailCard.tsx        # Staff registration details and contact actions
+        │   ├── PatientPastHistory.tsx       # Comprehensive prior visits timeline
+        │   ├── PrescriptionUploader.tsx     # Physical prescription slip upload form
+        │   ├── AnalyticsTab.tsx             # Date filtering, summary metric cards & volume trends
+        │   └── StaffPerformanceTable.tsx    # 4-metric staff registrations & mobile-stacked cards
+        └── staff-dashboard/                 # Modularized Staff Reception Desk
+            ├── StaffDashboard.tsx           # Staff workspace container (Welcome banner, spot desk, live queue)
+            ├── Header.tsx                   # Staff top navigation bar with branding & profile
+            ├── WelcomeBanner.tsx            # Daily inspirational rotation banner
+            ├── LiveOpdQueueTable.tsx        # Mobile-first card-based live OPD queue with expandable cards
+            ├── SpotAppointmentDesk.tsx      # Spot appointment booking container & validation orchestrator
+            └── appointment-desk/            # Appointment creation sub-components
                 ├── DoctorSessionFields.tsx
                 ├── PatientInfoFields.tsx
                 ├── ComplaintTags.tsx
@@ -66,16 +71,18 @@ vamshi-ent-hospital-reception-desk/
 
 | Component | Responsibility & Features |
 | :--- | :--- |
-| **`DoctorDashboard.tsx`** | Top-level container. Features dynamic time-based greeting, daily inspirational medical quotation, and prominent top tabs (`📋 OPDs` and `📊 Analytics`). |
+| **`DoctorDashboard.tsx`** | Top-level orchestrator. Features dynamic time-based greeting, daily inspirational medical quotation, and prominent top tabs (`📋 OPDs` and `📊 Analytics`) highlighted in emerald green. |
 | **`DoctorHeader.tsx`** | Preserves hospital brand styling with "Vamshi ENT Hospital" powered by "AshwiniCare", active doctor profile badge, fast role switch to Staff Desk, and Log Out action. |
-| **`OpdsConsultationTab.tsx`** | Responsive master-detail layout: synchronizes incoming patient queue with detailed clinical review and completion workflow. |
-| **`DoctorQueue.tsx`** | Real-time queue column showing token badges (`#M-01`, `#E-01`), patient names, demographic pills, complaint teasers, and status filters (`Waiting`, `Consulted`, `All`). |
-| **`PatientConsultationModal.tsx`** | Clean, light pop-up modal launched on patient selection. Streamlined Section 3 with camera snapshot uploader, doctor's note, and follow-up review. |
-| **`PatientDetailCard.tsx`** | Displays staff intake details: chief complaints, staff attribution, session slot, room, and notes. |
-| **`PatientPastHistory.tsx`** | Comprehensive prior visits timeline with clickable thumbnail previews of previous handwritten/printed prescriptions and full document lightbox inspection. |
-| **`PrescriptionUploader.tsx`** | Drag-and-drop & photo uploader for physical handwritten prescription slips (images/PDFs), test presets, diagnosis, internal remarks, and **"Complete Consultation & Save"** button. |
-| **`AnalyticsTab.tsx`** | Date filtering (`Today`, `This Week`, `This Month`, `Custom Range`), OPD volume metrics, completed ratio, new vs. follow-up ratio, and daily throughput trend bar chart. |
-| **`StaffPerformanceTable.tsx`** | Breakdown table tracking registrations per reception staff member, morning/evening volume, and consultation completion rates. |
+| **`OpdsConsultationTab.tsx`** | Responsive workspace coordinating incoming patient queue, quick search, "Add Appointment" registration trigger, and consultation modals. |
+| **`DoctorQueue.tsx`** | Real-time queue column showing token badges, status filter buttons (`Waiting`, `Consulted`, `All`), and patient count statistics. |
+| **`QueueCard.tsx`** | Individual patient card structured in a clean vertical hierarchy: **Line 1**: Token # + Status Badge; **Line 2**: Patient Name; **Line 3**: Gender & Age; **Line 4**: Chief Complaint. |
+| **`AddAppointmentModal.tsx`** | Streamlined modal positioned directly above the patient queue search bar. Captures essential fields only: Patient Name (with autocomplete), Contact Phone (with autocomplete), Gender, Age, OPD Session Slot, and Chief Complaint. |
+| **`PatientConsultationModal.tsx`** | Clean consultation modal. Header bar displays Token #, Patient Name, Gender/Age, UHID, Status Badge, and Close Button. Supports post-consultation editing ("Edit Consultation" / "Save Changes"). |
+| **`PatientHeaderCard.tsx`** | Clinical priority details: Visit Reason (Chief Complaint) displayed first, Front Desk Remarks (rendered only when present), and Contact Phone Number at the bottom. |
+| **`PreviousPrescriptionsAccordion.tsx`** | Accordion displayed only for returning patients. Cards show Doctor's Note/Diagnosis, past prescription image thumbnail with click-to-zoom lightbox, and visit date. |
+| **`ConsultationForm.tsx`** | Un-nested consultation workflow: 1. Doctor's Note / Diagnosis textarea; 2. Prescription attachment ("Take Camera Photo" & "Upload File / PDF"); 3. Follow-up review pills (`None`, `3 days`, `7 days`, and `Custom Date` with numeric input and auto-calculated date preview); 4. Action button. Relocates session info subtly to the bottom. |
+| **`AnalyticsTab.tsx`** | Date filtering (`Today`, `This Week`, `This Month`, `Custom Range`), OPD volume metrics, completed ratio, new vs. follow-up ratio, and responsive daily volume trends bar chart. |
+| **`StaffPerformanceTable.tsx`** | Displays four essential reception metrics: **Staff Member**, **Registrations**, **Share %**, and **Morning/Evening Session Breakdown** (`M: X / E: Y`). On mobile screens (`< md`), automatically converts into stacked vertical cards without horizontal scroll. |
 
 ---
 
@@ -96,32 +103,36 @@ The spot appointment booking system in `SpotAppointmentDesk.tsx` is modularized 
 
 ## ⚡ Key Workflow Capabilities
 
-### 1. Mobile Card-Based Queue (`LiveOpdQueueTable.tsx`)
-- **Card-Based View:** Replaces cumbersome tabular grids with high-density mobile cards showing Token badges (`#M-01`), patient names, demographic pills, and live statuses.
-- **Privacy-First Collapsed Mode:** Phone numbers are hidden by default on collapsed cards to maintain patient privacy on reception monitors.
-- **Expandable Detail Layer:** Tapping a card reveals visit reasons, extra notes, booked timestamp with staff attribution, consulting doctor name, and patient contact.
+### 1. Vertical Patient Queue Card Hierarchy (`QueueCard.tsx` / `LiveOpdQueueTable.tsx`)
+- **Top Line**: Token Number (e.g., `#M-01`) on the left, with Status Badge (`Waiting` / `Consulted`) beside it.
+- **Second Line**: Patient Name on its own dedicated row.
+- **Third Line**: Gender & Age (`Female · 41y`) on its own dedicated row.
+- **Fourth Line**: Chief Complaint clearly highlighted at the bottom.
 
-### 2. Tap-to-Call Phone Integration
-- When expanding any patient's queue card, staff can tap the **Contact** button to trigger instant direct phone dialing (`tel:+91...`) on mobile devices without manual dialing errors.
+### 2. Streamlined Clinical Consultation Flow (`PatientConsultationModal.tsx`)
+- **Header Bar**: Displays only essential identification: Token #, Patient Name, Gender/Age, UHID, Status Badge, and Close Button.
+- **Clinical Priority Card**: Highlights Chief Complaint first, followed by Front Desk Remarks (if present), and Contact Phone Number.
+- **Historical Prescriptions**: Collapsible accordion showing prior diagnoses and past prescription document scans with full-screen lightbox inspection.
+- **Consultation Entry**: Doctor diagnosis textarea, camera capture (`capture="environment"`) and PDF/image file upload, and follow-up review selector (`None`, `3 days`, `7 days`, `Custom Date` with automatic date calculation).
+- **Edit Consultation**: Consulted patients can be reopened by the doctor to revise notes, prescription attachments, or review timelines via **"Save Changes"**.
+- **Clean Modal Lifecycle**: Closing the modal resets active highlighting in the queue and cleanly restores background body scrolling.
 
-### 3. Status Priority Sorting
-- In the **"All Status"** queue view, patients in **`Waiting`** status are prioritized and displayed at the top, followed by **`Consulted`** patients at the bottom.
-- Sequential token ordering (`#M-01`, `#M-02`, ...) is strictly preserved within each status group.
+### 3. Direct Doctor Appointment Registration (`AddAppointmentModal.tsx`)
+- Dedicated **"Add Appointment"** button located directly above the queue search bar.
+- Essential fields only: Patient Name, Contact Phone (+91), Gender, Age, OPD Session Slot (Morning/Evening), and Reason for Visit.
+- Instant autocomplete matching against existing hospital patient records with dynamic age calculation.
 
-### 4. Timed Success Toast Alerts
-- Scheduling an appointment triggers a subtle, auto-dismissing floating toast notification (`"Appointment scheduled successfully! #M-0X"`) at the top of the viewport.
-- Automatically dismisses after **3 seconds** and includes an instant manual dismiss button.
+### 4. Simplified Analytics & Mobile-Optimized Staff Performance (`AnalyticsTab.tsx` / `StaffPerformanceTable.tsx`)
+- **Essential Metrics Only**: Staff Member (Name & Avatar), Total Registrations, % Share of Total, and Morning/Evening Session Breakdown (`M: 4 / E: 2`).
+- **Zero Horizontal Scrolling**: Desktop displays a clean 4-column table; mobile screens (`< md`) automatically transform rows into stacked vertical cards.
+- **No Extraneous Sections**: Uncluttered view focusing on clinical volume trends and staff distribution without confusing consultant metrics.
 
-### 5. Dynamic Age Calculation for Returning Patients
-- When searching or auto-filling returning patient records, their age is dynamically calculated based on the elapsed time between registration/visit date and the current date:
-  - Formula: `Current Age = Stored Age + (Current Year - Registration Year)`
-- The updated age, gender, and phone number are populated into the appointment form.
-- The age field remains fully editable for reception staff to adjust or fine-tune.
+### 5. Tap-to-Call Phone Integration
+- Receptionists and doctors can tap the **Contact** button to trigger instant direct phone dialing (`tel:+91...`) on mobile devices without manual dialing errors.
 
 ### 6. Centered Footer Layout (`Footer.tsx`)
-- Replaced split edge alignment with a clean, single-column centered stack:
-  - **Hospital Name:** **Vamshi ENT Hospital** in bold prominent typography.
-  - **Attribution:** Centered subtext `powered by AshwiniCare`.
+- **Hospital Name:** **Vamshi ENT Hospital** in bold prominent typography.
+- **Attribution:** Centered subtext `powered by AshwiniCare`.
 
 ---
 
